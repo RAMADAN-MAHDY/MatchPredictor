@@ -36,9 +36,15 @@ app.get("/results", async (req, res) => {
 
 // API (بديل backend.php)
 app.get("/api/predictions", async (req, res) => {
-  const predictions = await Prediction.find().sort({ time: -1 });
-  res.json({ records: predictions });
+  try {
+    await connectDB(); // اتأكد من الاتصال قبل query
+    const predictions = await Prediction.find().sort({ time: -1 });
+    res.json({ records: predictions });
+  } catch (err) {
+    res.status(500).json({ result: "error", message: "DB connection failed" });
+  }
 });
+
 
 app.post("/api/predictions", async (req, res) => {
   const { name, winner, score1, score2 } = req.body;
