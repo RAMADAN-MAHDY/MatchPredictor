@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
-let isConnected = false; // cache connection
+let isConnected = false;
 
 export const connectDB = async () => {
-  if (isConnected) {
-    return;
+  if (isConnected || mongoose.connection.readyState === 1) {
+    return; // already connected
   }
 
   try {
